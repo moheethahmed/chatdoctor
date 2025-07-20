@@ -45,22 +45,65 @@ def speak(text):
 
 # Streamlit UI Styling
 st.set_page_config(page_title="ChatDoctor AI", layout="centered")
-st.markdown(
-    """
+st.markdown("""
     <style>
-        .stApp {
-            background-color: #fdfcf7;
-        }
-        h1, .st-bb {
-            color: red;
-        }
-        .stMarkdown, label, div {
-            color: black;
-        }
+    /* Background and font */
+    body {
+        background-color: #fffaf0;
+        color: #000;
+    }
+
+    .stApp {
+        background-color: #fffaf0;
+        color: #000;
+    }
+
+    /* Button */
+    .stButton button {
+        background-color: white;
+        color: black;
+        border: 2px solid red;
+        padding: 0.5em 1em;
+        border-radius: 10px;
+    }
+
+    .stButton button:hover {
+        background-color: #ffe5e5;
+        color: black;
+    }
+
+    /* Multi-select dropdown */
+    .stMultiSelect > div {
+        background-color: white !important;
+        color: black !important;
+        border: 1px solid red;
+        border-radius: 10px;
+    }
+
+    /* Headings and labels */
+    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+        color: red;
+    }
+
+    /* Success, info, warning boxes */
+    .stAlert-success {
+        background-color: #e6ffe6;
+        color: #000;
+    }
+
+    .stAlert-info {
+        background-color: #e6f7ff;
+        color: #000;
+    }
+
+    .stAlert-error {
+        background-color: #ffe6e6;
+        color: red;
+        font-weight: bold;
+    }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
+
 
 st.title("🩺 ChatDoctor AI")
 st.markdown("Enter your symptoms below, and we'll suggest a possible condition with remedies.")
