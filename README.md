@@ -8,12 +8,10 @@ ChatDoctor is an AI-powered medical assistant that predicts diseases based on sy
 - Shows remedy
 - 🎤 Speaks the diagnosis out loud
 
-## 📸 Screenshot
-![App Screenshot](<img width="1363" height="875" alt="Screenshot 2025-07-20 155037" src="https://github.com/user-attachments/assets/4a6f90ba-bcd5-4691-b119-3781bc6ac7af" />
-)
-
 ## 🌐 Live App
-[Click to Try ChatDoctor AI](https://chatdoctor-yourname.streamlit.app/)
+[Click to Try ChatDoctor AI](https://chatdoctor-moheethahmed.streamlit.app/)
 
 ## ⚠️ Disclaimer
 This app is for informational purposes only. Always consult a professional doctor for medical advice.
+
+<img width="1363" height="875" alt="Screenshot 2025-07-20 155037" src="https://github.com/user-attachments/assets/fe7c39f8-4c4c-43ce-bb57-9576649de182" />
