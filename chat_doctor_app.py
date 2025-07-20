@@ -45,23 +45,54 @@ def speak(text):
 
 # Streamlit UI Styling
 st.set_page_config(page_title="ChatDoctor AI", layout="centered")
-st.markdown(
-    """
+st.markdown("""
     <style>
-        .stApp {
-            background-color: #fdfcf7;
-        }
-        h1, .st-bb {
-            color: red;
-        }
-        .stMarkdown, label, div {
-            color: black;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+    body {
+        background-color: #fffaf0;
+        color: black;
+    }
 
+    .stButton button {
+        background-color: white;
+        color: black;
+        border: 2px solid red;
+        padding: 0.5em 1em;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    .stButton button:hover {
+        background-color: #ffe6e6;
+    }
+
+    .stMultiSelect > div {
+        background-color: white !important;
+        color: black !important;
+        border: 2px solid red !important;
+        border-radius: 8px;
+    }
+
+    h1, h2, h3 {
+        color: red;
+    }
+
+    .stAlert[data-testid="stAlert-success"] {
+        background-color: #d4f4d2;
+        color: #0a3d0a;
+    }
+
+    .stAlert[data-testid="stAlert-info"] {
+        background-color: #d4e9fa;
+        color: #0c3f66;
+    }
+
+    .stAlert[data-testid="stAlert-error"] {
+        background-color: #fbdada;
+        color: #8a0e0e;
+        font-weight: bold;
+    }
+    </style>
+""", unsafe_allow_html=True)
 st.title("🩺 ChatDoctor AI")
 st.markdown("Enter your symptoms below, and we'll suggest a possible condition with remedies.")
 
