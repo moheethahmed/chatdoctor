@@ -2,91 +2,85 @@ import streamlit as st
 import pandas as pd
 import pickle
 from gtts import gTTS
-import base64
+import tempfile
 
-# Load model and data
-model = pickle.load(open('disease_model.pkl', 'rb'))
-data = pd.read_csv('disease_dataset.csv')
-symptoms = data.columns[:-1].tolist()
+# Load model and encoder
+model = pickle.load(open("chatdoctor_model.pkl", "rb"))
+le = pickle.load(open("label_encoder.pkl", "rb"))
 
-# Disease remedies
-disease_remedies = {
-    'Flu': 'Stay hydrated, rest, and use over-the-counter medications.',
-    'Cold': 'Rest, drink fluids, and use nasal sprays.',
-    'Migraine': 'Use prescribed medications, rest in a dark room, and avoid triggers.',
-    'Allergy': 'Avoid allergens and take antihistamines.',
-    'Asthma': 'Use inhalers, avoid allergens, and stay indoors if needed.',
-    'COVID-19': 'Isolate, monitor oxygen, and consult a doctor.',
-    'Malaria': 'Take antimalarial medications and consult a doctor immediately.',
-    'Dengue': 'Drink plenty of fluids and consult a doctor.',
-    'Typhoid': 'Antibiotics and proper hydration are essential.',
-    'Jaundice': 'Rest, hydration, and avoid fatty foods.'
+# Load symptoms and dataset
+df = pd.read_csv("chatdoctor_expanded_dataset.csv")
+symptoms = df.columns[:-1].tolist()
+
+# Remedies
+remedies = {
+    "Common Cold": "🛌 Rest, stay hydrated, and use saline nasal spray.",
+    "Flu": "💧 Drink fluids and rest. Antiviral meds may help.",
+    "COVID-19": "😷 Isolate, monitor oxygen, and consult a doctor.",
+    "Migraine": "🕶️ Rest in a quiet dark room and avoid triggers.",
+    "Food Poisoning": "🥤 Stay hydrated and avoid solid food for some time.",
+    "Malaria": "💊 Use antimalarial meds and rest well.",
+    "Dengue": "🩸 Stay hydrated and monitor platelet count.",
+    "Typhoid": "💧 Drink clean water and follow antibiotics.",
+    "Sinusitis": "🌡️ Use steam inhalation and nasal decongestants.",
+    "Bronchitis": "🌬️ Use humidifier, drink warm fluids, and rest.",
+    "Tuberculosis": "💊 Complete TB treatment and maintain good nutrition.",
+    "Asthma": "💨 Use inhalers, avoid allergens, and stay indoors if needed.",
+    "Pneumonia": "💊 Take prescribed antibiotics and stay warm and hydrated.",
+    "Diabetes": "🩸 Monitor sugar, eat balanced meals, and stay active.",
+    "Hypertension": "💓 Reduce salt, manage stress, and take meds regularly.",
+    "Anemia": "🥩 Eat iron-rich foods and take supplements.",
+    "Allergy": "💊 Use antihistamines and avoid triggers.",
+    "Depression": "🧠 Talk therapy, regular exercise, and support are key.",
+    "Anxiety": "🧘 Practice breathing, reduce caffeine, and talk to someone.",
+    "Chickenpox": "❄️ Calamine lotion for itching and avoid close contact."
 }
 
-# Streamlit UI config
-st.set_page_config(page_title="ChatDoctor AI", layout="centered")
+# gTTS speech function
+def speak(text):
+    tts = gTTS(text=text, lang='en')
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as fp:
+        tts.save(fp.name)
+        st.audio(fp.name, format='audio/mp3')
 
-# Custom styling
+# Streamlit UI Styling
+st.set_page_config(page_title="ChatDoctor AI", layout="centered")
 st.markdown(
     """
     <style>
-    body, .stApp {
-        background-color: #fefaf1;
-        color: black;
-    }
-    h1, h2, h3, h4, h5, h6, p {
-        color: black !important;
-    }
-    .stMultiSelect>div>div>div {
-        background-color: white !important;
-        color: black !important;
-        border: 2px solid red;
-    }
-    .stMultiSelect span {
-        color: black !important;
-    }
-    .stButton>button {
-        background-color: white;
-        color: black;
-        border: 2px solid red;
-        padding: 6px 20px;
-        border-radius: 8px;
-    }
+        .stApp {
+            background-color: #fdfcf7;
+        }
+        h1, .st-bb {
+            color: red;
+        }
+        .stMarkdown, label, div {
+            color: black;
+        }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Header
-st.markdown("<h1>🩺 ChatDoctor AI</h1>", unsafe_allow_html=True)
-st.write("Enter your symptoms below, and we'll suggest a possible condition with remedies.")
+st.title("🩺 ChatDoctor AI")
+st.markdown("Enter your symptoms below, and we'll suggest a possible condition with remedies.")
 
-# Input
-selected_symptoms = st.multiselect("Choose your symptoms:", symptoms)
+# User Input
+selected_symptoms = st.multiselect("Choose your symptoms:", options=symptoms)
 
+# Prediction
 if st.button("Diagnose"):
-    input_data = [1 if symptom in selected_symptoms else 0 for symptom in symptoms]
-    prediction = model.predict([input_data])[0]
-    remedy = disease_remedies.get(prediction, "Consult a professional doctor.")
+    if not selected_symptoms:
+        st.warning("Please select at least one symptom.")
+    else:
+        input_vector = [1 if s in selected_symptoms else 0 for s in symptoms]
+        predicted = model.predict([input_vector])[0]
+        disease = le.inverse_transform([predicted])[0]
+        remedy = remedies.get(disease, "❗ Please consult a healthcare provider for treatment advice.")
 
-    st.success(f"🔍 You may have: **{prediction}**")
-    st.info(f"💡 Remedy: 🧑‍⚕️ {remedy}")
-    st.warning("📌 DISCLAIMER: ALWAYS CONSULT A PROFESSIONAL DOCTOR FOR REAL DIAGNOSIS.")
+        st.success(f"🔍 You may have: **{disease}**")
+        st.info(f"💡 Remedy: {remedy}")
+        st.error("📌 DISCLAIMER: ALWAYS CONSULT A PROFESSIONAL DOCTOR FOR REAL DIAGNOSIS.")
 
-    # Text-to-speech
-    message = f"Based on your symptoms, you may have {prediction}. Remedy is: {remedy}."
-    tts = gTTS(message)
-    tts.save("voice.mp3")
-
-    with open("voice.mp3", "rb") as audio_file:
-        audio_bytes = audio_file.read()
-        b64 = base64.b64encode(audio_bytes).decode()
-
-        st.markdown(
-            f"""
-            <audio autoplay>
-                <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
-            </audio>
-            """,
-            unsafe_allow_html=True
-        )
+        speak_text = f"Based on your symptoms, you may have {disease}. Suggested remedy: {remedy}"
+        speak(speak_text)
