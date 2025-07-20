@@ -1,12 +1,13 @@
 # 🩺 ChatDoctor AI
 
-ChatDoctor is an AI-powered medical assistant that predicts diseases based on symptoms and suggests home remedies. 📍Disclaimer This app is for informational purposes only. Always consult a professional doctor for medical advice.
+ChatDoctor is an AI-powered medical assistant that predicts diseases based on symptoms and suggests home remedies. 
+📍Disclaimer This app is for informational purposes only. Always consult a professional doctor for medical advice.
 
 ## 🚀 Features
 - Select symptoms from a list
 - Predicts possible condition
 - Shows remedy
-- 🎤 Speaks the diagnosis out loud
+- Speaks the diagnosis out loud
 
 ## 🌐 Live App
 [Click here to try the Ai](https://chatdoctor-moheethahmed.streamlit.app/)
