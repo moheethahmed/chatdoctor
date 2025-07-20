@@ -1,0 +1,6 @@
+fever,headache,cough,fatigue,sore_throat,runny_nose,chills,body_pain,nausea,vomiting,diarrhea,shortness_of_breath,prognosis
+1,1,1,0,1,1,0,0,0,0,0,0,Common Cold
+1,1,1,1,0,0,1,1,0,0,0,0,Flu
+1,1,1,1,1,1,1,1,0,0,0,1,COVID-19
+0,1,0,1,0,0,0,0,1,1,0,0,Migraine
+0,0,0,1,0,0,0,1,1,1,1,0,Food Poisoning
