@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 import pickle
-import pyttsx3
+from gtts import gTTS
+import tempfile
 
 # Load model and encoder
 model = pickle.load(open("chatdoctor_model.pkl", "rb"))
@@ -35,22 +36,39 @@ remedies = {
     "Chickenpox": "❄️ Calamine lotion for itching and avoid close contact."
 }
 
-# Text-to-speech setup
+# gTTS speech function
 def speak(text):
-    engine = pyttsx3.init()
-    engine.setProperty('rate', 160)
-    engine.setProperty('volume', 1.0)
-    engine.say(text)
-    engine.runAndWait()
+    tts = gTTS(text=text, lang='en')
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as fp:
+        tts.save(fp.name)
+        st.audio(fp.name, format='audio/mp3')
 
-# Streamlit App UI
+# Streamlit UI Styling
 st.set_page_config(page_title="ChatDoctor AI", layout="centered")
+st.markdown(
+    """
+    <style>
+        .stApp {
+            background-color: #fdfcf7;
+        }
+        h1, .st-bb {
+            color: red;
+        }
+        .stMarkdown, label, div {
+            color: black;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("🩺 ChatDoctor AI")
 st.markdown("Enter your symptoms below, and we'll suggest a possible condition with remedies.")
 
-# User input: symptom selection
+# User Input
 selected_symptoms = st.multiselect("Choose your symptoms:", options=symptoms)
 
+# Prediction
 if st.button("Diagnose"):
     if not selected_symptoms:
         st.warning("Please select at least one symptom.")
@@ -64,6 +82,5 @@ if st.button("Diagnose"):
         st.info(f"💡 Remedy: {remedy}")
         st.error("📌 DISCLAIMER: ALWAYS CONSULT A PROFESSIONAL DOCTOR FOR REAL DIAGNOSIS.")
 
-        # Speak the result
         speak_text = f"Based on your symptoms, you may have {disease}. Suggested remedy: {remedy}"
         speak(speak_text)
