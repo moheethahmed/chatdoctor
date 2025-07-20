@@ -48,7 +48,7 @@ st.set_page_config(page_title="ChatDoctor AI", layout="centered")
 st.markdown("""
     <style>
     body {
-        background-color: #fffaf0;
+        background-color: #ffffff;
         color: white;
     }
 
