@@ -47,63 +47,52 @@ def speak(text):
 st.set_page_config(page_title="ChatDoctor AI", layout="centered")
 st.markdown("""
     <style>
-    /* Background and font */
     body {
         background-color: #fffaf0;
-        color: #000;
+        color: black;
     }
 
-    .stApp {
-        background-color: #fffaf0;
-        color: #000;
-    }
-
-    /* Button */
     .stButton button {
         background-color: white;
         color: black;
         border: 2px solid red;
         padding: 0.5em 1em;
-        border-radius: 10px;
+        border-radius: 8px;
+        font-weight: bold;
     }
 
     .stButton button:hover {
-        background-color: #ffe5e5;
-        color: black;
+        background-color: #ffe6e6;
     }
 
-    /* Multi-select dropdown */
     .stMultiSelect > div {
         background-color: white !important;
         color: black !important;
-        border: 1px solid red;
-        border-radius: 10px;
+        border: 2px solid red !important;
+        border-radius: 8px;
     }
 
-    /* Headings and labels */
-    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+    h1, h2, h3 {
         color: red;
     }
 
-    /* Success, info, warning boxes */
-    .stAlert-success {
-        background-color: #e6ffe6;
-        color: #000;
+    .stAlert[data-testid="stAlert-success"] {
+        background-color: #d4f4d2;
+        color: #0a3d0a;
     }
 
-    .stAlert-info {
-        background-color: #e6f7ff;
-        color: #000;
+    .stAlert[data-testid="stAlert-info"] {
+        background-color: #d4e9fa;
+        color: #0c3f66;
     }
 
-    .stAlert-error {
-        background-color: #ffe6e6;
-        color: red;
+    .stAlert[data-testid="stAlert-error"] {
+        background-color: #fbdada;
+        color: #8a0e0e;
         font-weight: bold;
     }
     </style>
 """, unsafe_allow_html=True)
-
 
 st.title("🩺 ChatDoctor AI")
 st.markdown("Enter your symptoms below, and we'll suggest a possible condition with remedies.")
