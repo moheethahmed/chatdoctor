@@ -49,7 +49,7 @@ st.markdown("""
     <style>
     body {
         background-color: #fffaf0;
-        color: black;
+        color: white;
     }
 
     .stButton button {
